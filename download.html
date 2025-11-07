@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Certificate - Certificate System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --text: #202124;
+            --muted: #5f6368;
+            --border: #e0e0e0;
+            --primary: #1a73e8;
+            --primary-hover: #1669c1;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 16px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            margin: 0 0 6px;
+            font-weight: 500;
+        }
+        
+        .header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .content {
+            padding: 24px;
+        }
+        
+        .search-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .input-group {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .search-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        
+        .search-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(26,115,232,0.15);
+        }
+        
+        .search-form button {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        
+        .search-form button:hover {
+            background: var(--primary-hover);
+        }
+        
+        .message {
+            display: none;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin: 16px 0;
+            font-size: 13px;
+            text-align: center;
+        }
+        
+        .message.show { display: block; }
+        .message.success {
+            border-color: #c8e6c9;
+            background: #f1f8e9;
+            color: #1b5e20;
+        }
+        .message.error {
+            border-color: #f8c7c7;
+            background: #fdecec;
+            color: #8a1f1f;
+        }
+        
+        .certificate-section {
+            display: none;
+        }
+        
+        .certificate-section.show {
+            display: block;
+        }
+        
+        .certificate-info {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .info-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: var(--muted);
+            width: 120px;
+            font-size: 13px;
+        }
+        
+        .info-value {
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .preview-container {
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .preview-container h3 {
+            margin: 0 0 12px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        #certificateCanvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+        
+        .download-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 16px 0;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 0;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #188038;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #146c31;
+        }
+        
+        .btn-secondary {
+            background: #d93025;
+            color: #fff;
+        }
+        
+        .btn-secondary:hover {
+            background: #b1271c;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 16px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Download Your Certificate</h1>
+            <p>Enter your certificate ID to download</p>
+        </div>
+        
+        <div class="content">
+            <div class="search-section">
+                <div class="search-form">
+                    <input 
+                        type="text" 
+                        id="certificateIdInput" 
+                        placeholder="Enter your certificate ID (e.g., CSAC2025-A1B2C)"
+                    >
+                    <button onclick="loadCertificate()">Load Certificate</button>
+                </div>
+                <div class="message" id="message"></div>
+            </div>
+            
+            <div class="certificate-section" id="certificateSection">
+                <div class="certificate-info">
+                    <div class="info-row">
+                        <div class="info-label">Name:</div>
+                        <div class="info-value" id="studentName"></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value" id="studentEmail"></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Certificate ID:</div>
+                        <div class="info-value" id="displayCertId"></div>
+                    </div>
+                </div>
+                
+                <div class="preview-container">
+                    <h3>Certificate Preview</h3>
+                    <canvas id="certificateCanvas"></canvas>
+                </div>
+                
+                <div class="download-buttons">
+                    <button class="btn btn-primary" onclick="downloadPNG()">
+                        Download as PNG
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadPDF()">
+                        Download as PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let certificateData = null;
+        
+        // Check if coming from generation page
+        window.addEventListener('DOMContentLoaded', () => {
+            const storedId = sessionStorage.getItem('certificateId');
+            if (storedId) {
+                document.getElementById('certificateIdInput').value = storedId;
+                loadCertificate();
+                sessionStorage.removeItem('certificateId');
+            }
+        });
+        
+        async function loadCertificate() {
+            const certId = document.getElementById('certificateIdInput').value.trim();
+            
+            if (!certId) {
+                showMessage('Please enter a certificate ID', 'error');
+                return;
+            }
+            
+            try {
+                // Use the new simple certificate API
+                const response = await fetch(`/api/simple_certificate?id=${encodeURIComponent(certId)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    certificateData = data;
+                    displayCertificate(data);
+                } else {
+                    showMessage(data.error || 'Certificate not found', 'error');
+                    document.getElementById('certificateSection').classList.remove('show');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Failed to load certificate', 'error');
+            }
+        }
+        
+        function displayCertificate(data) {
+            document.getElementById('studentName').textContent = data.name;
+            document.getElementById('studentEmail').textContent = data.email;
+            document.getElementById('displayCertId').textContent = data.reference_id;
+            
+            generateCertificatePreview(data.name, data.reference_id);
+            
+            document.getElementById('certificateSection').classList.add('show');
+            showMessage('Certificate loaded successfully!', 'success');
+        }
+        
+        function generateCertificatePreview(name, certId) {
+            const canvas = document.getElementById('certificateCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = 'attended.png';
+            
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                ctx.drawImage(img, 0, 0);
+                
+                // Fixed positions for certificate elements
+                const positions = {
+                    name: {
+                        x: canvas.width / 2,
+                        y: 714,
+                        baseFontSize: 72,
+                        fontFamily: ' "Arial", "sans-serif"',
+                        color: '#0d5483',
+                        maxWidth: canvas.width * 0.8 // 80% of canvas width
+                    },
+                    certificateId: {
+                        x: canvas.width / 2,
+                        y: 1400,
+                        baseFontSize: 48,
+                        fontFamily: 'Arial, sans-serif',
+                        color: '#403f3f',
+                        maxWidth: canvas.width * 0.9 // 90% of canvas width
+                    }
+                };
+                
+                // Function to calculate and draw text with dynamic font size
+                function drawTextWithAutoSize(text, config) {
+                    let fontSize = config.baseFontSize;
+                    ctx.font = fontSize + 'px ' + config.fontFamily;
+                    ctx.fillStyle = config.color;
+                    ctx.textAlign = 'center';
+                    
+                    // Measure text width
+                    let textWidth = ctx.measureText(text).width;
+                    
+                    // Reduce font size if text is too wide
+                    while (textWidth > config.maxWidth && fontSize > 20) {
+                        fontSize -= 2; // Reduce by 2px each iteration
+                        ctx.font = fontSize + 'px ' + config.fontFamily;
+                        textWidth = ctx.measureText(text).width;
+                    }
+                    
+                    // Draw the text
+                    ctx.fillText(text, config.x, config.y);
+                    
+                    // Return the actual font size used (for debugging)
+                    return fontSize;
+                }
+                
+                // Draw name with dynamic font size (Sacramento font)
+                const nameFontSize = drawTextWithAutoSize(name, positions.name);
+                console.log(`Name "${name}" rendered at ${nameFontSize}px (base: ${positions.name.baseFontSize}px)`);
+                
+                // Draw certificate ID with dynamic font size (Canva Sans font)
+                const idFontSize = drawTextWithAutoSize(certId, positions.certificateId);
+                console.log(`ID "${certId}" rendered at ${idFontSize}px (base: ${positions.certificateId.baseFontSize}px)`);
+            };
+            
+            img.onerror = function() {
+                showMessage('Failed to load certificate template', 'error');
+            };
+        }
+        
+        function downloadPNG() {
+            const canvas = document.getElementById('certificateCanvas');
+            const link = document.createElement('a');
+            link.download = `Certificate_${certificateData.reference_id}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            showMessage('Certificate downloaded as PNG!', 'success');
+        }
+        
+        function downloadPDF() {
+            const canvas = document.getElementById('certificateCanvas');
+            const imgData = canvas.toDataURL('image/png');
+            
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'px',
+                format: [canvas.width, canvas.height]
+            });
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            pdf.save(`Certificate_${certificateData.reference_id}.pdf`);
+            
+            showMessage('Certificate downloaded as PDF!', 'success');
+        }
+        
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message show ${type}`;
+            
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

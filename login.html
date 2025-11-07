@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate System - Generate Certificate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --text: #202124;
+            --muted: #5f6368;
+            --border: #e0e0e0;
+            --primary: #1a73e8;
+            --primary-hover: #1669c1;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 24px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 440px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            margin: 0 0 4px;
+            font-size: 22px;
+            font-weight: 500;
+        }
+        
+        .header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .form-container {
+            padding: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #fff;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(26,115,232,0.15);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            border: 0;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: var(--primary-hover);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            border: 1px solid;
+        }
+        
+        .message.show { display: block; }
+        .message.success {
+            background: #e6f4ea;
+            color: #137333;
+            border-color: #b3e0c0;
+        }
+        .message.error {
+            background: #fce8e6;
+            color: #c5221f;
+            border-color: #f4c7c3;
+        }
+        .message.info {
+            background: #e8f0fe;
+            color: #1967d2;
+            border-color: #d2e3fc;
+        }
+        
+        .result-container {
+            display: none;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: 4px;
+            margin-top: 16px;
+        }
+        
+        .result-container.show { display: block; }
+        
+        .result-container h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .result-container p {
+            margin: 0 0 12px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        
+        .certificate-id {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            background: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            margin: 12px 0;
+            word-break: break-all;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-copy {
+            background: #fff;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-copy:hover {
+            background: var(--bg);
+        }
+        
+        .btn-download {
+            background: var(--primary);
+            color: #fff;
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-download:hover {
+            background: var(--primary-hover);
+        }
+        
+        /* Confirmation Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #fff;
+            border-radius: 8px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .modal-body p {
+            margin: 0 0 16px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+        
+        .confirm-detail {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+        
+        .confirm-detail strong {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .confirm-detail span {
+            display: block;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .modal-footer {
+            padding: 12px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid;
+        }
+        
+        .modal-btn.cancel {
+            background: #fff;
+            color: var(--text);
+            border-color: var(--border);
+        }
+        
+        .modal-btn.cancel:hover {
+            background: var(--bg);
+        }
+        
+        .modal-btn.confirm {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        
+        .modal-btn.confirm:hover {
+            background: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Generate Certificate</h1>
+            <p>Enter your details to get your certificate</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="message" id="message"></div>
+            
+            <form id="certificateForm">
+                <div class="form-group">
+                    <label for="name">Full Name (as it should appear on certificate)</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="e.g., Rajesh Kumar Sharma"
+                        required
+                    >
+                    <small style="color: var(--muted); font-size: 12px; margin-top: 4px; display: block;">
+                        💡 Use Title Case - first letter of each word capitalized
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Generate Certificate
+                </button>
+            </form>
+            
+            <div class="result-container" id="resultContainer">
+                <h3>Certificate Generated Successfully!</h3>
+                <p>Your unique certificate ID:</p>
+                <div class="certificate-id" id="certificateId"></div>
+                <p style="font-size: 12px; color: var(--muted);">
+                    Save this ID to download your certificate anytime
+                </p>
+                <div class="action-buttons">
+                    <button class="btn btn-copy" onclick="copyCertificateId()">
+                        Copy ID
+                    </button>
+                    <a href="download.html" class="btn btn-download">
+                        Download Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Your Details</h2>
+            </div>
+            <div class="modal-body">
+                <p>Please verify your information is correct:</p>
+                
+                <div class="confirm-detail">
+                    <strong>Name on Certificate</strong>
+                    <span id="confirmName" style="font-family: 'Arial', 'sans-serif'; font-size: 24px; color: #181818;"></span>
+                </div>
+                
+                <div class="confirm-detail">
+                    <strong>Email</strong>
+                    <span id="confirmEmail"></span>
+                </div>
+                
+                <p style="margin-top: 16px; font-size: 14px; color: var(--muted);">
+                    ⚠️ This name will appear on your certificate exactly as shown above. Make sure it's correct!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" onclick="closeModal()">
+                    Cancel
+                </button>
+                <button class="modal-btn confirm" onclick="confirmGenerate()">
+                    Confirm & Generate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let formData = {};
+        
+        document.getElementById('certificateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showConfirmation();
+        });
+        
+        function showConfirmation() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!name || !email) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Store form data
+            formData = { name, email };
+            
+            // Show in modal
+            document.getElementById('confirmName').textContent = name;
+            document.getElementById('confirmEmail').textContent = email;
+            document.getElementById('confirmModal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+        }
+        
+        async function confirmGenerate() {
+            closeModal();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+            
+            try {
+                const response = await fetch('/api/simple_generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.existing) {
+                        showMessage('✅ Certificate already exists for this email! Showing your existing certificate ID.', 'info');
+                    } else {
+                        showMessage('✅ Certificate generated successfully!', 'success');
+                    }
+                    
+                    // Show result
+                    document.getElementById('certificateId').textContent = data.reference_id;
+                    document.getElementById('resultContainer').classList.add('show');
+                    
+                    // Store ID in session storage for download page
+                    sessionStorage.setItem('certificateId', data.reference_id);
+                    
+                    // Hide form
+                    document.getElementById('certificateForm').style.display = 'none';
+                } else {
+                    showMessage(data.error || 'Failed to generate certificate', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Connection error. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Certificate';
+            }
+        }
+        
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message show ${type}`;
+            
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 5000);
+        }
+        
+        function copyCertificateId() {
+            const certId = document.getElementById('certificateId').textContent;
+            
+            // Try modern Clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(certId).then(() => {
+                    showMessage('✅ Certificate ID copied to clipboard!', 'success');
+                }).catch(() => {
+                    // Fallback if clipboard API fails
+                    fallbackCopy(certId);
+                });
+            } else {
+                // Use fallback for older browsers or non-HTTPS
+                fallbackCopy(certId);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            // Create a temporary text area
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '0';
+            document.body.appendChild(textArea);
+            
+            // Select and copy
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showMessage('✅ Certificate ID copied!', 'success');
+                } else {
+                    showMessage('❌ Copy failed. Please copy manually: ' + text, 'error');
+                }
+            } catch (err) {
+                showMessage('❌ Copy not supported. ID: ' + text, 'error');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>

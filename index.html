@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate System - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 24px;
+            background: #f8f9fa;
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 540px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            padding: 24px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 24px;
+            font-weight: 500;
+            color: #202124;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 14px;
+            color: #5f6368;
+        }
+        
+        .content {
+            padding: 32px 24px;
+        }
+        
+        .options {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .option-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .option-card:hover {
+            border-color: #1a73e8;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .option-card h2 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+        }
+        
+        .option-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #5f6368;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Certificate System</h1>
+            <p>Generate and download your certificate</p>
+        </div>
+        
+        <div class="content">
+            <div class="options">
+                <a href="login.html" class="option-card">
+                    <h2>Generate Certificate</h2>
+                    <p>Enter your name and email to generate a new certificate</p>
+                </a>
+                
+                <a href="download.html" class="option-card">
+                    <h2>Download Certificate</h2>
+                    <p>Already have a certificate ID? Download it here</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
