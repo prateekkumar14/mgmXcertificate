@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             margin: 0;
             min-height: 100vh;
@@ -70,7 +74,7 @@
         
         .option-card:hover {
             border-color: #1a73e8;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         .option-card h2 {
@@ -88,20 +92,21 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <h1>Certificate System</h1>
             <p>Generate and download your certificate</p>
         </div>
-        
+
         <div class="content">
             <div class="options">
                 <a href="login.html" class="option-card">
                     <h2>Generate Certificate</h2>
                     <p>Enter your name and email to generate a new certificate</p>
                 </a>
-                
+
                 <a href="download.html" class="option-card">
                     <h2>Download Certificate</h2>
                     <p>Already have a certificate ID? Download it here</p>
@@ -110,4 +115,5 @@
         </div>
     </div>
 </body>
+
 </html>
